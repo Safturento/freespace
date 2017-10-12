@@ -3,7 +3,7 @@ import time
 import re
 
 iLED = 17
-dt = .01
+dt = .03
 io.setmode(io.BCM)
 io.setwarnings(False)
 
@@ -14,7 +14,7 @@ io.setup(iLED, io.IN)
 start = 0
 
 def toChar(bits):
-	return chr(int(''.join(bits),2))
+	return chr(int(''.join(str(bit) for bit in bits),2))
 
 
 while True:
@@ -27,9 +27,7 @@ while True:
 			for i in range(8):
 				time.sleep(dt)
 				bits.append(io.input(iLED))
-			print(toChar(bits) ,end='')
-
-
+			print(toChar(bits))
 
 
 
