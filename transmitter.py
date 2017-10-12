@@ -8,23 +8,26 @@ io.setmode(io.BCM)
 io.setwarnings(False)
 
 message = "Hello World"
-binMsg = "".join(format(ord(x), 'b').zfill(8) for x in message)
-bitList = [int(x) for x in binMsg]
+messageBytes = [format(ord(x), 'b').zfill(8) for x in message]
+byteList = [tuple(int(bit) for bit in byte) for byte in messageBytes]
 
 total = len(bitList)
 
 io.setup(oLED, io.OUT)
 
-for bit in bitList:
+for byte in byteList:
+	# Send start bit
 	io.output(oLED, 1)
-	if bit==1:
-		time.sleep(dt*.75)
-		io.output(oLED, 0)
-		time.sleep(dt*.25)
-	else:
-		time.sleep(dt*.25)
-		io.output(oLED,0)
-		time.sleep(dt*.75)
+	time.sleep(dt)
+
+	# Send 8 bits for character
+	for bit in byte:
+		io.output(bit)
+		time.sleep(dt)
+
+	# Send stop bit
+	io.output(oLED, 0)
+	time.sleep(dt)
 
 #make sure to turn it off after
 io.output(oLED, 0)
